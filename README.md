@@ -2,7 +2,7 @@
 
 Para desenvolver as atividades da disciplina de Computação Gráfica favor utilizar as respectivas pastas para postar os trabalhos de cada unidade.  
 
-Alunos:  
+Alunos: Guilherme dos Santos, Leonardo Linhares Silva, Marcos Antonio Mattedi, Vinícius Matiola Tramontin  
 
 ## [Atividades da Unidade 1](Unidade1/ "Atividades da Unidade 1")
 
