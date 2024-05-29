@@ -89,8 +89,8 @@ namespace gcgcg
             objetoSelecionado = circuloIn;
             objetoSelecionado.shaderObjeto = new Shader("Shaders/shader.vert", "Shaders/shaderAmarela.frag");
 
-            listaBBox.Add(circuloOut.PontosId(9));
-            listaBBox.Add(circuloOut.PontosId(45));
+            listaBBox.Add(circuloOut.PontosId(8));
+            listaBBox.Add(circuloOut.PontosId(44));
 
             BBoxFig =  new Retangulo(mundo, ref rotuloAtual, listaBBox[1], listaBBox[0]);
             BBoxFig.PrimitivaTipo = PrimitiveType.LineLoop;
