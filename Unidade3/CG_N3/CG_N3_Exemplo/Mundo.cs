@@ -136,10 +136,65 @@ namespace gcgcg
         objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
         // objetoSelecionado.shaderObjeto = _shaderAmarela;
       }
+      if(estadoTeclado.IsKeyPressed(Keys.R)) {
+        objetoSelecionado.ShaderObjeto = _shaderVermelha;
+      }
+      if(estadoTeclado.IsKeyPressed(Keys.G)) {
+        objetoSelecionado.ShaderObjeto = _shaderVerde;
+      }
+      if(estadoTeclado.IsKeyPressed(Keys.B)) {
+        objetoSelecionado.ShaderObjeto = _shaderAzul;
+      }
       if (estadoTeclado.IsKeyPressed(Keys.G))                 //TODO: testar com grafo maior ,, irmãos
         mundo.GrafocenaImprimir("");
-      if (estadoTeclado.IsKeyPressed(Keys.P) && objetoSelecionado != null)
-        Console.WriteLine(objetoSelecionado.ToString());
+      if (estadoTeclado.IsKeyPressed(Keys.P) && objetoSelecionado != null) {
+        if(objetoSelecionado.PrimitivaTipo == PrimitiveType.LineLoop){
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.Lines;
+        } else {
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.LineLoop;
+        }
+      }
+      if (estadoTeclado.IsKeyDown(Keys.V)) {
+        int idx = 0;
+
+        int janelaLargura = ClientSize.X;
+        int janelaAltura = ClientSize.Y;
+        Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
+        Ponto4D sruPonto = Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
+
+        for(int i = 1; i < objetoSelecionado.PontosListaTamanho; i++){
+          if(Matematica.DistanciaQuadrado(objetoSelecionado.PontosId(i), sruPonto) < Matematica.DistanciaQuadrado(objetoSelecionado.PontosId(idx), sruPonto)){
+            idx = i;
+          }
+        }
+
+        objetoSelecionado.PontosAlterar(sruPonto, idx);
+      }
+      if (estadoTeclado.IsKeyPressed(Keys.E)) {
+        int idx = 0;
+
+        int janelaLargura = ClientSize.X;
+        int janelaAltura = ClientSize.Y;
+        Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
+        Ponto4D sruPonto = Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
+
+        List<Ponto4D> newPontos = new List<Ponto4D>();
+
+        for(int i = 1; i < objetoSelecionado.PontosListaTamanho; i++){
+          if(Matematica.DistanciaQuadrado(objetoSelecionado.PontosId(i), sruPonto) < Matematica.DistanciaQuadrado(objetoSelecionado.PontosId(idx), sruPonto)){
+            idx = i;
+          }
+        }
+
+        for (int i = 0; i < objetoSelecionado.PontosListaTamanho; i++) {
+          if(i != idx){
+            newPontos.Add(objetoSelecionado.PontosId(i));
+          }
+        }
+
+        objetoSelecionado.PontosLimpar();
+        objetoSelecionado = new Poligono(mundo, ref rotuloAtual, newPontos);
+      }
       if (estadoTeclado.IsKeyPressed(Keys.M) && objetoSelecionado != null)
         objetoSelecionado.MatrizImprimir();
       //TODO: não está atualizando a BBox com as transformações geométricas
@@ -165,10 +220,13 @@ namespace gcgcg
         objetoSelecionado.MatrizRotacao(10);
       if (estadoTeclado.IsKeyPressed(Keys.D2) && objetoSelecionado != null)
         objetoSelecionado.MatrizRotacao(-10);
-    if (estadoTeclado.IsKeyPressed(Keys.D3) && objetoSelecionado != null)   //FIXME: problema depois de usa rotação pto qquer, não usa o novo centro da BBOX
+      if (estadoTeclado.IsKeyPressed(Keys.D3) && objetoSelecionado != null)   //FIXME: problema depois de usa rotação pto qquer, não usa o novo centro da BBOX
         objetoSelecionado.MatrizRotacaoZBBox(10);
       if (estadoTeclado.IsKeyPressed(Keys.D4) && objetoSelecionado != null)
         objetoSelecionado.MatrizRotacaoZBBox(-10);
+      if (estadoTeclado.IsKeyPressed(Keys.D) && objetoSelecionado != null) {
+        objetoSelecionado.PontosLimpar();
+      }
       #endregion
 
       #region  Mouse
@@ -202,22 +260,36 @@ namespace gcgcg
           }
         }
       }
-      if (MouseState.IsButtonDown(MouseButton.Right) && objetoSelecionado != null)
-      {
-        Console.WriteLine("MouseState.IsButtonDown(MouseButton.Right)");
-
+      if (MouseState.IsButtonPressed(MouseButton.Right) && objetoSelecionado == null) {
         int janelaLargura = ClientSize.X;
         int janelaAltura = ClientSize.Y;
         Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
         Ponto4D sruPonto = Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
 
-        objetoSelecionado.PontosAlterar(sruPonto, 0);
+        objetoSelecionado = new Poligono(mundo, ref rotuloAtual, new List<Ponto4D>());
+        objetoSelecionado.PontosAdicionar(sruPonto);
+        objetos.Add(objetoSelecionado);
+      }
+      if (MouseState.IsButtonPressed(MouseButton.Right) && objetoSelecionado != null) {
+        int janelaLargura = ClientSize.X;
+        int janelaAltura = ClientSize.Y;
+        Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
+        Ponto4D sruPonto = Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
+
+        objetoSelecionado.PontosAdicionar(sruPonto);
+      }
+      if (MouseState.IsButtonDown(MouseButton.Right)) {
+        int janelaLargura = ClientSize.X;
+        int janelaAltura = ClientSize.Y;
+        Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
+        Ponto4D sruPonto = Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
+
+        objetoSelecionado.PontosAlterar(sruPonto, objetoSelecionado.PontosListaTamanho-1);
       }
       if (MouseState.IsButtonReleased(MouseButton.Right))
       {
         Console.WriteLine("MouseState.IsButtonReleased(MouseButton.Right)");
       }
-
       #endregion
 
     }
