@@ -4,19 +4,19 @@
 
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL4;
-using OpenTK.Mathematics;
+// using OpenTK.Mathematics;
 
 namespace CG_Biblioteca
 {
   public class BBox
   {
     private double menorX, menorY, menorZ, maiorX, maiorY, maiorZ;
-    private Ponto4D centro = new Ponto4D();
+    private readonly Ponto4D centro = new();
 
     private int _vertexBufferObject_bbox;
     private int _vertexArrayObject_bbox;
 
-    private Shader _shaderAmarela;
+    private readonly Shader _shaderAmarela;
 
     public BBox()
     {
@@ -31,23 +31,26 @@ namespace CG_Biblioteca
 
     public void Atualizar(Transformacao4D matriz, List<Ponto4D> pontosLista)
     {
-      Ponto4D pto = pontosLista[0];
-      pto = matriz.MultiplicarPonto(pto);
-
-      this.menorX = pto.X; this.menorY = pto.Y; this.menorZ = pto.Z;
-      this.maiorX = pto.X; this.maiorY = pto.Y; this.maiorZ = pto.Z;
-
-      for (var i = 1; i < pontosLista.Count; i++)
+      if (pontosLista.Count > 0)
       {
-        pto = pontosLista[i];
+        Ponto4D pto = pontosLista[0];
         pto = matriz.MultiplicarPonto(pto);
-        Atualizar(matriz, pto);
-      }
 
-      ProcessarCentro();
+        menorX = pto.X; menorY = pto.Y; menorZ = pto.Z;
+        maiorX = pto.X; maiorY = pto.Y; maiorZ = pto.Z;
+
+        for (var i = 1; i < pontosLista.Count; i++)
+        {
+          pto = pontosLista[i];
+          pto = matriz.MultiplicarPonto(pto);
+          Atualizar(pto);
+        }
+
+        ProcessarCentro();
+      }
     }
 
-    private void Atualizar(Transformacao4D matriz, Ponto4D pto)
+    private void Atualizar(Ponto4D pto)
     {
       if (pto.X < menorX)
         menorX = pto.X;
@@ -70,7 +73,7 @@ namespace CG_Biblioteca
     }
 
     /// Calcula o ponto do centro da BBox.
-    public void ProcessarCentro()
+    private void ProcessarCentro()
     {
       centro.X = (maiorX + menorX) / 2;
       centro.Y = (maiorY + menorY) / 2;
@@ -78,11 +81,12 @@ namespace CG_Biblioteca
     }
 
     /// Verifica se um ponto está dentro da BBox.
+    //FIXME: tem duas rotinas de dentro, aqui e na matematica
     public bool Dentro(Ponto4D pto)
     {
-      if ((pto.X >= obterMenorX && pto.X <= obterMaiorX) &&
-          (pto.Y >= obterMenorY && pto.Y <= obterMaiorY) &&
-          (pto.Z >= obterMenorZ && pto.Z <= obterMaiorZ))
+      if (pto.X >= ObterMenorX && pto.X <= ObterMaiorX &&
+          pto.Y >= ObterMenorY && pto.Y <= ObterMaiorY &&
+          pto.Z >= ObterMenorZ && pto.Z <= ObterMaiorZ)
       {
         return true;
       }
@@ -90,25 +94,25 @@ namespace CG_Biblioteca
     }
 
     /// Obter menor valor X da BBox.
-    public double obterMenorX => menorX;
+    public double ObterMenorX => menorX;
 
     /// Obter menor valor Y da BBox.
-    public double obterMenorY => menorY;
+    public double ObterMenorY => menorY;
 
     /// Obter menor valor Z da BBox.
-    public double obterMenorZ => menorZ;
+    public double ObterMenorZ => menorZ;
 
     /// Obter maior valor X da BBox.
-    public double obterMaiorX => maiorX;
+    public double ObterMaiorX => maiorX;
 
     /// Obter maior valor Y da BBox.
-    public double obterMaiorY => maiorY;
+    public double ObterMaiorY => maiorY;
 
     /// Obter maior valor Z da BBox.
-    public double obterMaiorZ => maiorZ;
+    public double ObterMaiorZ => maiorZ;
 
     /// Obter ponto do centro da BBox.
-    public Ponto4D obterCentro => centro;
+    public Ponto4D ObterCentro => centro;
 
 #if CG_Gizmo
     public void Desenhar(Transformacao4D matrizGrafo)

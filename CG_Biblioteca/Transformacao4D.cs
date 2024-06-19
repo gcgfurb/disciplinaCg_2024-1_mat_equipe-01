@@ -22,7 +22,7 @@ namespace CG_Biblioteca
     static public readonly double DEG_TO_RAD = 0.017453292519943295769236907684886;
 
     /// \brief Cria uma matriz de Trasnformacao com uma matriz Identidade.
-	  private double[] matriz = {
+	  private readonly double[] matriz = {
       1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
@@ -120,7 +120,7 @@ namespace CG_Biblioteca
     //TODO: tentar usar Const
     public Ponto4D MultiplicarPonto(Ponto4D pto)
     {
-      Ponto4D pointResult = new Ponto4D(
+      Ponto4D pointResult = new(
           matriz[0] * pto.X + matriz[4] * pto.Y + matriz[8] * pto.Z + matriz[12] * pto.W,
           matriz[1] * pto.X + matriz[5] * pto.Y + matriz[9] * pto.Z + matriz[13] * pto.W,
           matriz[2] * pto.X + matriz[6] * pto.Y + matriz[10] * pto.Z + matriz[14] * pto.W,
@@ -159,7 +159,7 @@ namespace CG_Biblioteca
 
       for (i = 0; i < 16; i++)
       {
-        matriz[i] = (data[i]);
+        matriz[i] = data[i];
       }
     }
 
@@ -172,7 +172,7 @@ namespace CG_Biblioteca
       retorno += "|" + ObterElemento(1) + " | " + ObterElemento(5) + " | " + ObterElemento(9) + " | " + ObterElemento(13) + "\n";
       retorno += "|" + ObterElemento(2) + " | " + ObterElemento(6) + " | " + ObterElemento(10) + " | " + ObterElemento(14) + "\n";
       retorno += "|" + ObterElemento(3) + " | " + ObterElemento(7) + " | " + ObterElemento(11) + " | " + ObterElemento(15) + "\n";
-      return (retorno);
+      return retorno;
     }
 #endif
 

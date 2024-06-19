@@ -2,16 +2,15 @@
 class BBox {
     + BBox()
     + Atualizar(matriz:Transformacao4D, pontosLista:List<Ponto4D>) : void
-    + ProcessarCentro() : void
     + Dentro(pto:Ponto4D) : bool
-    + obterMenorX : double <<get>>
-    + obterMenorY : double <<get>>
-    + obterMenorZ : double <<get>>
-    + obterMaiorX : double <<get>>
-    + obterMaiorY : double <<get>>
-    + obterMaiorZ : double <<get>>
+    + ObterMenorX : double <<get>>
+    + ObterMenorY : double <<get>>
+    + ObterMenorZ : double <<get>>
+    + ObterMaiorX : double <<get>>
+    + ObterMaiorY : double <<get>>
+    + ObterMaiorZ : double <<get>>
     + Desenhar(matrizGrafo:Transformacao4D) : void
     + <<override>> ToString() : string
 }
-BBox --> "obterCentro" Ponto4D
+BBox --> "ObterCentro" Ponto4D
 @enduml

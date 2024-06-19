@@ -27,9 +27,9 @@ namespace CG_Biblioteca
     }
     public Ponto4D(Ponto4D pto)
     {
-      this.x = pto.x;
-      this.y = pto.y;
-      this.z = pto.z;
+      x = pto.x;
+      y = pto.y;
+      z = pto.z;
     }
     // Operator overloaded
     /// <summary>
@@ -45,7 +45,7 @@ namespace CG_Biblioteca
     /// </example>
     public static Ponto4D operator +(Ponto4D pto1, Ponto4D pto2) => new Ponto4D(pto1.X + pto2.X, pto1.Y + pto2.Y, pto1.Z + pto2.Z);
 
-    //TODO: a sobrescrição do operador + funciona mais o - ou -- não
+    //TODO: a sobrescrição do operador + funciona mais o - ou -- não .. ver: https://learn.microsoft.com/pt-br/dotnet/csharp/language-reference/operators/operator-overloading
     // public static Ponto4D operator -(Ponto4D pto) => new Ponto4D(-pto.X, -pto.Y, -pto.Z);
 
     //TODO: Testar estas funções e ver se precisam existir
@@ -81,8 +81,8 @@ namespace CG_Biblioteca
     {
       string retorno;
       retorno = "__ Ponto4D: " + "\n";
-      retorno += "P" + "[" + x + "," + y + "," + z + "," + w + "]" + "\n";
-      return (retorno);
+      retorno += "P" + "[" + string.Format("{0,10}", x) + "," + string.Format("{0,10}", y) + "," + string.Format("{0,10}", z) + "," + string.Format("{0,10}", w) + "]" + "\n";
+      return retorno;
     }
 #endif
 
