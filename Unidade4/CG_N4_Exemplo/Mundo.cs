@@ -189,23 +189,16 @@ namespace gcgcg
         objetoSelecionado.shaderCor = _shader;
         objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
         objetoSelecionado.shaderCor = _shader;
+        objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
       }
 
       if (estadoTeclado.IsKeyDown(Keys.D2)) {
         _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
 
-        //_shader.SetInt("material.diffuse", 0);
-        //_shader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
-        //_shader.SetFloat("material.shininess", 32.0f);
-
-        //_shader.SetVector3("light.position", _lightPos);
-        //_shader.SetVector3("light.ambient", new Vector3(0.6f));
-        //_shader.SetVector3("light.diffuse", new Vector3(0.5f));
-        //_shader.SetVector3("light.specular", new Vector3(1.0f));
-
         objetoSelecionado.shaderCor = _shader;
         objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
         objetoSelecionado.shaderCor = _shader;
+        objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
       }
       #endregion
 

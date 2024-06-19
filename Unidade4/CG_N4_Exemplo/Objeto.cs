@@ -26,7 +26,7 @@ namespace gcgcg
 
     // Vértices do objeto TODO: o objeto mundo deveria ter estes atributos abaixo?
 
-    private Texture textura = Texture.LoadFromFile("Resources/skibidi-toilet-guy.jpg");
+    private Texture textura = Texture.LoadFromFile("Resources/container.png");
 
     public Texture texturaSet { set => textura = value; }
 

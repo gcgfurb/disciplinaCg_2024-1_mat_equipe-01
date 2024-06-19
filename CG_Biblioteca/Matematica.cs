@@ -15,23 +15,35 @@ namespace CG_Biblioteca
     /// <returns></returns>
     public static Ponto4D GerarPtosCirculo(double angulo, double raio)
     {
-      Ponto4D pto = new Ponto4D();
-      pto.X = (raio * Math.Cos(Math.PI * angulo / 180.0));
-      pto.Y = (raio * Math.Sin(Math.PI * angulo / 180.0));
-      pto.Z = 0;
-      return (pto);
+      Ponto4D pto = new()
+      {
+        X = raio * Math.Cos(Math.PI * angulo / 180.0),
+        Y = raio * Math.Sin(Math.PI * angulo / 180.0),
+        Z = 0
+      };
+      return pto;
     }
 
     public static double GerarPtosCirculoSimetrico(double raio)
     {
-      return (raio * Math.Cos(Math.PI * 45 / 180.0));
+      return raio * Math.Cos(Math.PI * 45 / 180.0);
+    }
+
+    public static Ponto4D InterpolarRetaPonto(Ponto4D ptoA, Ponto4D ptoB, double t)
+    {
+      Ponto4D pto = new()
+      {
+        X = InterpolarRetaValor(ptoA.X, ptoB.X, t),
+        Y = InterpolarRetaValor(ptoA.Y, ptoB.Y, t)
+      };
+      return pto;
     }
 
     public static bool Dentro(BBox bBox, Ponto4D pto)
     {
-      if ((pto.X >= bBox.obterMenorX && pto.X <= bBox.obterMaiorX) &&
-          (pto.Y >= bBox.obterMenorY && pto.Y <= bBox.obterMaiorY) &&
-          (pto.Z >= bBox.obterMenorZ && pto.Z <= bBox.obterMaiorZ))
+      if (pto.X >= bBox.ObterMenorX && pto.X <= bBox.ObterMaiorX &&
+          pto.Y >= bBox.ObterMenorY && pto.Y <= bBox.ObterMaiorY &&
+          pto.Z >= bBox.ObterMenorZ && pto.Z <= bBox.ObterMaiorZ)
       {
         return true;
       }
@@ -39,30 +51,30 @@ namespace CG_Biblioteca
     }
 
     // Distância Euclidiana sem a Raiz
-    public static double distanciaQuadrado(Ponto4D ptoA, Ponto4D ptoB)
+    public static double DistanciaQuadrado(Ponto4D ptoA, Ponto4D ptoB)
     {
       return (
-        Math.Pow((ptoB.X - ptoA.X), 2) +
-          Math.Pow((ptoB.Y - ptoA.Y), 2)
+        Math.Pow(ptoB.X - ptoA.X, 2) +
+          Math.Pow(ptoB.Y - ptoA.Y, 2)
       );
     }
 
     // Distância Euclidiana
-    public static double distancia(Ponto4D ptoA, Ponto4D ptoB)
+    public static double Distancia(Ponto4D ptoA, Ponto4D ptoB)
     {
       return (
-        Math.Sqrt(distanciaQuadrado(ptoA, ptoB))
+        Math.Sqrt(DistanciaQuadrado(ptoA, ptoB))
       );
     }
 
     public static double ScanLineInterseccao(double yi, double y1, double y2)
     {
-      return ((yi - y1) / (y2 - y1));
+      return (yi - y1) / (y2 - y1);
     }
 
-    public static double ScanLineCalculaXi(double x1, double x2, double ti)
+    public static double InterpolarRetaValor(double x1, double x2, double ti)
     {
-      return (x1 + (x2 - x1) * ti);
+      return x1 + (x2 - x1) * ti;
     }
 
     //TODO: não implementado os casos especiais
@@ -71,13 +83,12 @@ namespace CG_Biblioteca
       double ti = ScanLineInterseccao(ptoClique.Y, ptoIni.Y, ptoFim.Y);
       if (ti >= 0 && ti <= 1)    // lado do polígono (segmento) Intersecciona a ScanLine
       {
-        double xi = ScanLineCalculaXi(ptoIni.X, ptoFim.X, ti);
+        double xi = InterpolarRetaValor(ptoIni.X, ptoFim.X, ti);
         if (xi > ptoClique.X)
           return true;
       }
       return false;
     }
-
 
   }
 }
