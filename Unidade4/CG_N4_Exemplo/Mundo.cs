@@ -185,6 +185,18 @@ namespace gcgcg
     private int _vertexBufferObject_texture6;
     private int _vertexArrayObject_texture6;
     private int _elementBufferObject_texture6;
+
+    private readonly Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
+    private int _vaoModel;
+    private Shader _lightingShader;
+
+    private bool luz1;
+    private bool luz2;
+    private bool luz3;
+    private bool luz4;
+    private bool luz5;
+    private bool luz6;
+
     private List<Ponto4D> verticesCubo;
 
     private Camera _camera;
@@ -499,68 +511,138 @@ namespace gcgcg
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
       mundo.Desenhar(new Transformacao4D(), _camera);
-      
-      objetoSelecionado.MatrizRotacao(0.05);
+      if(luz1 != true && luz2 != true && luz3 != true && luz4 != true && luz5 != true && luz6 != true) {
+        #region drawFrontTexture
+        
+        GL.BindVertexArray(_vertexArrayObject_texture);
 
-      #region drawFrontTexture
-      
-      GL.BindVertexArray(_vertexArrayObject_texture);
+        _texture.Use(TextureUnit.Texture0);
+        _shader.Use();
+        GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
 
-      _texture.Use(TextureUnit.Texture0);
-      _shader.Use();
-      GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
+        #endregion
 
-      #endregion
+        #region drawBackTexture
+        
+        GL.BindVertexArray(_vertexArrayObject_texture2);
 
-      #region drawBackTexture
-      
-      GL.BindVertexArray(_vertexArrayObject_texture2);
+        _texture2.Use(TextureUnit.Texture0);
+        _shader2.Use();
+        GL.DrawElements(PrimitiveType.Triangles, _indices2.Length, DrawElementsType.UnsignedInt, 0);
 
-      _texture2.Use(TextureUnit.Texture0);
-      _shader2.Use();
-      GL.DrawElements(PrimitiveType.Triangles, _indices2.Length, DrawElementsType.UnsignedInt, 0);
+        #endregion
 
-      #endregion
+        #region drawTopTexture
+        
+        GL.BindVertexArray(_vertexArrayObject_texture3);
 
-      #region drawTopTexture
-      
-      GL.BindVertexArray(_vertexArrayObject_texture3);
+        _texture3.Use(TextureUnit.Texture0);
+        _shader3.Use();
+        GL.DrawElements(PrimitiveType.Triangles, _indices3.Length, DrawElementsType.UnsignedInt, 0);
 
-      _texture3.Use(TextureUnit.Texture0);
-      _shader3.Use();
-      GL.DrawElements(PrimitiveType.Triangles, _indices3.Length, DrawElementsType.UnsignedInt, 0);
+        #endregion
 
-      #endregion
+        #region drawBottomTexture
+        
+        GL.BindVertexArray(_vertexArrayObject_texture4);
 
-      #region drawBottomTexture
-      
-      GL.BindVertexArray(_vertexArrayObject_texture4);
+        _texture4.Use(TextureUnit.Texture0);
+        _shader4.Use();
+        GL.DrawElements(PrimitiveType.Triangles, _indices4.Length, DrawElementsType.UnsignedInt, 0);
 
-      _texture4.Use(TextureUnit.Texture0);
-      _shader4.Use();
-      GL.DrawElements(PrimitiveType.Triangles, _indices4.Length, DrawElementsType.UnsignedInt, 0);
+        #endregion
 
-      #endregion
+        #region drawRightTexture
+        
+        GL.BindVertexArray(_vertexArrayObject_texture5);
 
-      #region drawRightTexture
-      
-      GL.BindVertexArray(_vertexArrayObject_texture5);
+        _texture5.Use(TextureUnit.Texture0);
+        _shader5.Use();
+        GL.DrawElements(PrimitiveType.Triangles, _indices5.Length, DrawElementsType.UnsignedInt, 0);
 
-      _texture5.Use(TextureUnit.Texture0);
-      _shader5.Use();
-      GL.DrawElements(PrimitiveType.Triangles, _indices5.Length, DrawElementsType.UnsignedInt, 0);
+        #endregion
 
-      #endregion
+        #region drawLeftTexture
+        
+        GL.BindVertexArray(_vertexArrayObject_texture6);
 
-      #region drawLeftTexture
-      
-      GL.BindVertexArray(_vertexArrayObject_texture6);
+        _texture6.Use(TextureUnit.Texture0);
+        _shader6.Use();
+        GL.DrawElements(PrimitiveType.Triangles, _indices6.Length, DrawElementsType.UnsignedInt, 0);
 
-      _texture6.Use(TextureUnit.Texture0);
-      _shader6.Use();
-      GL.DrawElements(PrimitiveType.Triangles, _indices6.Length, DrawElementsType.UnsignedInt, 0);
+        #endregion
+      }
 
-      #endregion
+      if(luz1) {
+        GL.BindVertexArray(_vaoModel);
+
+        _lightingShader.Use();
+
+        _lightingShader.SetMatrix4("model", Matrix4.Identity);
+        _lightingShader.SetMatrix4("view", _camera.GetViewMatrix());
+        _lightingShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+
+        _lightingShader.SetVector3("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
+        _lightingShader.SetVector3("lightColor", new Vector3(1.0f, 1.0f, 1.0f));
+        _lightingShader.SetVector3("lightPos", _lightPos);
+        _lightingShader.SetVector3("viewPos", _camera.Position);
+
+        GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+
+        objetoSelecionado.shaderCor = _lightingShader;
+        mundo.GrafocenaBuscaProximo(objetoSelecionado).shaderCor = _lightingShader;
+      }
+
+      if(luz2) {
+        GL.BindVertexArray(_vaoModel);
+
+        _lightingShader.Use();
+
+        _lightingShader.SetMatrix4("model", Matrix4.Identity);
+        _lightingShader.SetMatrix4("view", _camera.GetViewMatrix());
+        _lightingShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+
+        _lightingShader.SetVector3("viewPos", _camera.Position);
+
+        // Here we specify to the shaders what textures they should refer to when we want to get the positions.
+        _lightingShader.SetInt("material.diffuse", 0);
+        _lightingShader.SetInt("material.specular", 1);
+        _lightingShader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
+        _lightingShader.SetFloat("material.shininess", 32.0f);
+
+        _lightingShader.SetVector3("light.position", _lightPos);
+        _lightingShader.SetVector3("light.ambient", new Vector3(2.0f));
+        _lightingShader.SetVector3("light.diffuse", new Vector3(1f));
+        _lightingShader.SetVector3("light.specular", new Vector3(1.0f));
+
+        GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+
+        objetoSelecionado.shaderCor = _lightingShader;
+        mundo.GrafocenaBuscaProximo(objetoSelecionado).shaderCor = _lightingShader;
+      }
+
+      if(luz3) {
+        GL.BindVertexArray(_vaoModel);
+
+        _lightingShader.SetMatrix4("view", _camera.GetViewMatrix());
+        _lightingShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+
+        _lightingShader.SetVector3("viewPos", _camera.Position);
+
+        _lightingShader.SetInt("material.diffuse", 0);
+        _lightingShader.SetInt("material.specular", 1);
+        _lightingShader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
+        _lightingShader.SetFloat("material.shininess", 32.0f);
+
+        // Directional light needs a direction, in this example we just use (-0.2, -1.0, -0.3f) as the lights direction
+        _lightingShader.SetVector3("light.direction", new Vector3(-0.2f, -1.0f, -0.3f));
+        _lightingShader.SetVector3("light.ambient", new Vector3(0.2f));
+        _lightingShader.SetVector3("light.diffuse", new Vector3(0.5f));
+        _lightingShader.SetVector3("light.specular", new Vector3(1.0f));
+
+        objetoSelecionado.shaderCor = _lightingShader;
+        mundo.GrafocenaBuscaProximo(objetoSelecionado).shaderCor = _lightingShader;
+      }
 
 
 
@@ -587,23 +669,13 @@ namespace gcgcg
     {
       base.OnUpdateFrame(e);
 
+      objetoSelecionado.MatrizRotacao(0.05);
+
       // ☞ 396c2670-8ce0-4aff-86da-0f58cd8dcfdc   TODO: forma otimizada para teclado.
       #region Teclado
       var input = KeyboardState;
       if (input.IsKeyDown(Keys.Escape))
         Close();
-      if (input.IsKeyPressed(Keys.Space))
-      {
-        if (objetoSelecionado == null)
-          objetoSelecionado = mundo;
-        if (objetoSelecionado.shaderCor != _shader && objetoSelecionado.shaderCor != _shader2 && objetoSelecionado.shaderCor != _shader3 && objetoSelecionado.shaderCor != _shader4 && objetoSelecionado.shaderCor != _shader5 && objetoSelecionado.shaderCor != _shader6)
-          objetoSelecionado.shaderCor = _shaderBranca;
-        Objeto proximo = mundo.GrafocenaBuscaProximo(objetoSelecionado);
-        if (proximo.shaderCor!= _shader && proximo.shaderCor != _shader2 && proximo.shaderCor != _shader3 && proximo.shaderCor != _shader4 && proximo.shaderCor != _shader5 && proximo.shaderCor != _shader6)
-          objetoSelecionado = mundo.GrafocenaBuscaProximo(proximo);
-        if (objetoSelecionado.shaderCor != _shader && objetoSelecionado.shaderCor != _shader2 && objetoSelecionado.shaderCor != _shader3 && objetoSelecionado.shaderCor != _shader4 && objetoSelecionado.shaderCor != _shader5 && objetoSelecionado.shaderCor != _shader6)
-          objetoSelecionado.shaderCor = _shaderAmarela;
-      }
       if (input.IsKeyPressed(Keys.G))
         mundo.GrafocenaImprimir("");
       if (input.IsKeyPressed(Keys.P) && objetoSelecionado != null)
@@ -632,14 +704,123 @@ namespace gcgcg
         objetoSelecionado.MatrizEscalaXYZBBox(0.5, 0.5, 0.5);
       if (input.IsKeyPressed(Keys.End) && objetoSelecionado != null)
         objetoSelecionado.MatrizEscalaXYZBBox(2, 2, 2);
-      if (input.IsKeyPressed(Keys.D1) && objetoSelecionado != null)
-        objetoSelecionado.MatrizRotacao(10);
-      if (input.IsKeyPressed(Keys.D2) && objetoSelecionado != null)
-        objetoSelecionado.MatrizRotacao(-10);
-      if (input.IsKeyPressed(Keys.D3) && objetoSelecionado != null)
-        objetoSelecionado.MatrizRotacaoZBBox(10);
-      if (input.IsKeyPressed(Keys.D4) && objetoSelecionado != null)
-        objetoSelecionado.MatrizRotacaoZBBox(-10);
+      if (input.IsKeyPressed(Keys.D1)) {
+        _lightingShader = new Shader("Shaders/shader.vert", "Shaders/lighting.frag");
+
+        {
+          _vaoModel = GL.GenVertexArray();
+          GL.BindVertexArray(_vaoModel);
+
+          var positionLocation = _lightingShader.GetAttribLocation("aPos");
+          GL.EnableVertexAttribArray(positionLocation);
+          // Remember to change the stride as we now have 6 floats per vertex
+          GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
+
+          // We now need to define the layout of the normal so the shader can use it
+          var normalLocation = _lightingShader.GetAttribLocation("aNormal");
+          GL.EnableVertexAttribArray(normalLocation);
+          GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
+        }
+
+        luz1 = true;
+        luz2 = false;
+        luz3 = false;
+        luz4 = false;
+        luz5 = false;
+        luz6 = false;
+      }
+      if (input.IsKeyPressed(Keys.D2)) {
+        _lightingShader = new Shader("Shaders/shader.vert", "Shaders/lighting2.frag");
+
+        {
+          _vaoModel = GL.GenVertexArray();
+          GL.BindVertexArray(_vaoModel);
+
+          // All of the vertex attributes have been updated to now have a stride of 8 float sizes.
+          var positionLocation = _lightingShader.GetAttribLocation("aPos");
+          GL.EnableVertexAttribArray(positionLocation);
+          GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
+
+          var normalLocation = _lightingShader.GetAttribLocation("aNormal");
+          GL.EnableVertexAttribArray(normalLocation);
+          GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
+
+          // The texture coords have now been added too, remember we only have 2 coordinates as the texture is 2d,
+          // so the size parameter should only be 2 for the texture coordinates.
+          var texCoordLocation = _lightingShader.GetAttribLocation("aTexCoords");
+          GL.EnableVertexAttribArray(texCoordLocation);
+          GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
+        }
+
+        luz1 = false;
+        luz2 = true;
+        luz3 = false;
+        luz4 = false;
+        luz5 = false;
+        luz6 = false;
+      }
+      if (input.IsKeyPressed(Keys.D3)) {
+        _lightingShader = new Shader("Shaders/shader.vert", "Shaders/lighting3.frag");
+
+        {
+          _vaoModel = GL.GenVertexArray();
+          GL.BindVertexArray(_vaoModel);
+
+          var positionLocation = _lightingShader.GetAttribLocation("aPos");
+          GL.EnableVertexAttribArray(positionLocation);
+          GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
+
+          var normalLocation = _lightingShader.GetAttribLocation("aNormal");
+          GL.EnableVertexAttribArray(normalLocation);
+          GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
+
+          var texCoordLocation = _lightingShader.GetAttribLocation("aTexCoords");
+          GL.EnableVertexAttribArray(texCoordLocation);
+          GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
+        }
+
+        luz1 = false;
+        luz2 = false;
+        luz3 = true;
+        luz4 = false;
+        luz5 = false;
+        luz6 = false;
+      }
+      if (input.IsKeyPressed(Keys.D4)) {
+
+        luz1 = false;
+        luz2 = false;
+        luz3 = false;
+        luz4 = true;
+        luz5 = false;
+        luz6 = false;
+      }
+      if (input.IsKeyPressed(Keys.D5)) {
+
+        luz1 = false;
+        luz2 = false;
+        luz3 = false;
+        luz4 = false;
+        luz5 = true;
+        luz6 = false;
+      }
+      if (input.IsKeyPressed(Keys.D6)) {
+
+        luz1 = false;
+        luz2 = false;
+        luz3 = false;
+        luz4 = false;
+        luz5 = false;
+        luz6 = true;
+      }
+      if (input.IsKeyPressed(Keys.D0)) {
+        luz1 = false;
+        luz2 = false;
+        luz3 = false;
+        luz4 = false;
+        luz5 = false;
+        luz6 = false;
+      }
 
       const float cameraSpeed = 1.5f;
       if (input.IsKeyDown(Keys.Z))
