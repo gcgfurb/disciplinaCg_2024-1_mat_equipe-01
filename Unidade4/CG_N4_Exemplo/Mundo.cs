@@ -587,8 +587,6 @@ namespace gcgcg
         _lightingShader.SetVector3("lightPos", _lightPos);
         _lightingShader.SetVector3("viewPos", _camera.Position);
 
-        GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-
         objetoSelecionado.shaderCor = _lightingShader;
         mundo.GrafocenaBuscaProximo(objetoSelecionado).shaderCor = _lightingShader;
       }
@@ -615,8 +613,6 @@ namespace gcgcg
         _lightingShader.SetVector3("light.diffuse", new Vector3(1f));
         _lightingShader.SetVector3("light.specular", new Vector3(1.0f));
 
-        GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-
         objetoSelecionado.shaderCor = _lightingShader;
         mundo.GrafocenaBuscaProximo(objetoSelecionado).shaderCor = _lightingShader;
       }
@@ -639,6 +635,98 @@ namespace gcgcg
         _lightingShader.SetVector3("light.ambient", new Vector3(0.2f));
         _lightingShader.SetVector3("light.diffuse", new Vector3(0.5f));
         _lightingShader.SetVector3("light.specular", new Vector3(1.0f));
+
+        objetoSelecionado.shaderCor = _lightingShader;
+        mundo.GrafocenaBuscaProximo(objetoSelecionado).shaderCor = _lightingShader;
+      }
+
+      if(luz4) {
+        GL.BindVertexArray(_vaoModel);
+
+        _lightingShader.Use();
+
+        _lightingShader.SetMatrix4("view", _camera.GetViewMatrix());
+        _lightingShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+
+        _lightingShader.SetVector3("viewPos", _camera.Position);
+
+        _lightingShader.SetInt("material.diffuse", 0);
+        _lightingShader.SetInt("material.specular", 1);
+        _lightingShader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
+        _lightingShader.SetFloat("material.shininess", 32.0f);
+
+        _lightingShader.SetVector3("light.position", _lightPos);
+        _lightingShader.SetFloat("light.constant", 1.0f);
+        _lightingShader.SetFloat("light.linear", 0.09f);
+        _lightingShader.SetFloat("light.quadratic", 0.032f);
+        _lightingShader.SetVector3("light.ambient", new Vector3(0.2f));
+        _lightingShader.SetVector3("light.diffuse", new Vector3(0.5f));
+        _lightingShader.SetVector3("light.specular", new Vector3(1.0f));
+
+        objetoSelecionado.shaderCor = _lightingShader;
+        mundo.GrafocenaBuscaProximo(objetoSelecionado).shaderCor = _lightingShader;
+      }
+
+      if(luz5) {
+        GL.BindVertexArray(_vaoModel);
+
+        _lightingShader.Use();
+
+        _lightingShader.SetMatrix4("view", _camera.GetViewMatrix());
+        _lightingShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+
+        _lightingShader.SetVector3("viewPos", _camera.Position);
+
+        _lightingShader.SetInt("material.diffuse", 0);
+        _lightingShader.SetInt("material.specular", 1);
+        _lightingShader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
+        _lightingShader.SetFloat("material.shininess", 32.0f);
+
+        _lightingShader.SetVector3("light.position", _camera.Position);
+        _lightingShader.SetVector3("light.direction", _camera.Front);
+        _lightingShader.SetFloat("light.cutOff", MathF.Cos(MathHelper.DegreesToRadians(12.5f)));
+        _lightingShader.SetFloat("light.outerCutOff", MathF.Cos(MathHelper.DegreesToRadians(17.5f)));
+        _lightingShader.SetFloat("light.constant", 1.0f);
+        _lightingShader.SetFloat("light.linear", 0.09f);
+        _lightingShader.SetFloat("light.quadratic", 0.032f);
+        _lightingShader.SetVector3("light.ambient", new Vector3(0.2f));
+        _lightingShader.SetVector3("light.diffuse", new Vector3(0.5f));
+        _lightingShader.SetVector3("light.specular", new Vector3(1.0f));
+
+        objetoSelecionado.shaderCor = _lightingShader;
+        mundo.GrafocenaBuscaProximo(objetoSelecionado).shaderCor = _lightingShader;
+      }
+
+      if(luz6) {
+        GL.BindVertexArray(_vaoModel);
+
+        _lightingShader.Use();
+
+        _lightingShader.SetMatrix4("view", _camera.GetViewMatrix());
+        _lightingShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+
+        _lightingShader.SetVector3("viewPos", _camera.Position);
+
+        _lightingShader.SetInt("material.diffuse", 0);
+        _lightingShader.SetInt("material.specular", 1);
+        _lightingShader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
+        _lightingShader.SetFloat("material.shininess", 32.0f);
+
+        _lightingShader.SetVector3("dirLight.direction", new Vector3(-0.2f, -1.0f, -0.3f));
+        _lightingShader.SetVector3("dirLight.ambient", new Vector3(0.05f, 0.05f, 0.05f));
+        _lightingShader.SetVector3("dirLight.diffuse", new Vector3(0.4f, 0.4f, 0.4f));
+        _lightingShader.SetVector3("dirLight.specular", new Vector3(0.5f, 0.5f, 0.5f));
+
+        _lightingShader.SetVector3("spotLight.position", _camera.Position);
+        _lightingShader.SetVector3("spotLight.direction", _camera.Front);
+        _lightingShader.SetVector3("spotLight.ambient", new Vector3(0.0f, 0.0f, 0.0f));
+        _lightingShader.SetVector3("spotLight.diffuse", new Vector3(1.0f, 1.0f, 1.0f));
+        _lightingShader.SetVector3("spotLight.specular", new Vector3(1.0f, 1.0f, 1.0f));
+        _lightingShader.SetFloat("spotLight.constant", 1.0f);
+        _lightingShader.SetFloat("spotLight.linear", 0.09f);
+        _lightingShader.SetFloat("spotLight.quadratic", 0.032f);
+        _lightingShader.SetFloat("spotLight.cutOff", MathF.Cos(MathHelper.DegreesToRadians(12.5f)));
+        _lightingShader.SetFloat("spotLight.outerCutOff", MathF.Cos(MathHelper.DegreesToRadians(17.5f)));
 
         objetoSelecionado.shaderCor = _lightingShader;
         mundo.GrafocenaBuscaProximo(objetoSelecionado).shaderCor = _lightingShader;
@@ -787,6 +875,24 @@ namespace gcgcg
         luz6 = false;
       }
       if (input.IsKeyPressed(Keys.D4)) {
+        _lightingShader = new Shader("Shaders/shader.vert", "Shaders/lighting4.frag");
+
+        {
+          _vaoModel = GL.GenVertexArray();
+          GL.BindVertexArray(_vaoModel);
+
+          var positionLocation = _lightingShader.GetAttribLocation("aPos");
+          GL.EnableVertexAttribArray(positionLocation);
+          GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
+
+          var normalLocation = _lightingShader.GetAttribLocation("aNormal");
+          GL.EnableVertexAttribArray(normalLocation);
+          GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
+
+          var texCoordLocation = _lightingShader.GetAttribLocation("aTexCoords");
+          GL.EnableVertexAttribArray(texCoordLocation);
+          GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
+        }
 
         luz1 = false;
         luz2 = false;
@@ -796,6 +902,24 @@ namespace gcgcg
         luz6 = false;
       }
       if (input.IsKeyPressed(Keys.D5)) {
+        _lightingShader = new Shader("Shaders/shader.vert", "Shaders/lighting5.frag");
+
+        {
+          _vaoModel = GL.GenVertexArray();
+          GL.BindVertexArray(_vaoModel);
+
+          var positionLocation = _lightingShader.GetAttribLocation("aPos");
+          GL.EnableVertexAttribArray(positionLocation);
+          GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
+
+          var normalLocation = _lightingShader.GetAttribLocation("aNormal");
+          GL.EnableVertexAttribArray(normalLocation);
+          GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
+
+          var texCoordLocation = _lightingShader.GetAttribLocation("aTexCoords");
+          GL.EnableVertexAttribArray(texCoordLocation);
+          GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
+        }
 
         luz1 = false;
         luz2 = false;
@@ -805,6 +929,24 @@ namespace gcgcg
         luz6 = false;
       }
       if (input.IsKeyPressed(Keys.D6)) {
+        _lightingShader = new Shader("Shaders/shader.vert", "Shaders/lighting6.frag");
+
+        {
+          _vaoModel = GL.GenVertexArray();
+          GL.BindVertexArray(_vaoModel);
+
+          var positionLocation = _lightingShader.GetAttribLocation("aPos");
+          GL.EnableVertexAttribArray(positionLocation);
+          GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
+
+          var normalLocation = _lightingShader.GetAttribLocation("aNormal");
+          GL.EnableVertexAttribArray(normalLocation);
+          GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
+
+          var texCoordLocation = _lightingShader.GetAttribLocation("aTexCoords");
+          GL.EnableVertexAttribArray(texCoordLocation);
+          GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
+        }
 
         luz1 = false;
         luz2 = false;
